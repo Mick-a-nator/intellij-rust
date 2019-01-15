@@ -134,6 +134,7 @@ allprojects {
 
 val channelSuffix = if (channel.isBlank()) "" else "-$channel"
 val clionVersion = prop("clionVersion")
+val clionFullName = if (CI) "clion" else "clion-$clionVersion"
 
 val rustProjects = rootProject.subprojects.filter { it.name != "intellij-toml" }
 
@@ -184,9 +185,10 @@ project(":") {
         dest(file("${project.projectDir}/deps/clion-$clionVersion.tar.gz"))
     }
     val unpackClion = task<Copy>("unpackClion") {
-        onlyIf { !file("${project.projectDir}/deps/clion-$clionVersion").exists() }
+        onlyIf { !file("${project.projectDir}/deps/$clionFullName").exists() }
         from(tarTree("deps/clion-$clionVersion.tar.gz"))
         into(file("${project.projectDir}/deps"))
+        file("${project.projectDir}/deps/clion-$clionVersion").renameTo(file("${project.projectDir}/deps/$clionFullName"))
         dependsOn(downloadClion)
     }
 
@@ -252,7 +254,7 @@ project(":idea") {
 project(":debugger") {
     dependencies {
         compile(project(":"))
-        compileOnly(files("${rootProject.projectDir}/deps/clion-$clionVersion/lib/clion.jar"))
+        compileOnly(files("${rootProject.projectDir}/deps/$clionFullName/lib/clion.jar"))
         testCompile(project(":", "testOutput"))
     }
 }
