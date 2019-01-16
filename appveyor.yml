@@ -20,10 +20,10 @@ install:
   - for /f "delims=*" %%a in ('rustc --print sysroot') do (Mklink /D "C:\Users\appveyor\.rust-src" "%%a\lib\rustlib\src\rust\src\")
 
 build_script:
-  - gradlew.bat -Dkotlin.compiler.execution.strategy="in-process" assemble testClasses --no-daemon
+  - gradlew.bat -Dkotlin.compiler.execution.strategy="in-process" assemble testClasses --no-daemon --debug
 
 test_script:
-  - gradlew.bat check --no-daemon
+  - gradlew.bat check --no-daemon --debug
 
 on_success:
   - ps: rm C:\Users\appveyor\.gradle\caches\modules-2\modules-2.lock -force
