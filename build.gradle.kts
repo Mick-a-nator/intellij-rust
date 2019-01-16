@@ -184,11 +184,22 @@ project(":") {
         src("https://download.jetbrains.com/cpp/CLion-$clionVersion.tar.gz")
         dest(file("${project.projectDir}/deps/clion-$clionVersion.tar.gz"))
     }
+
     val unpackClion = task<Copy>("unpackClion") {
         onlyIf { !file("${project.projectDir}/deps/$clionFullName").exists() }
         from(tarTree("deps/clion-$clionVersion.tar.gz"))
         into(file("${project.projectDir}/deps"))
-        file("${project.projectDir}/deps/clion-$clionVersion").renameTo(file("${project.projectDir}/deps/$clionFullName"))
+        doLast {
+            file("${project.projectDir}/deps/clion-$clionVersion").renameTo(file("${project.projectDir}/deps/$clionFullName"))
+            logger.debug("${project.projectDir}/deps/clion-$clionVersion exists: " + file("${project.projectDir}/deps/clion-$clionVersion").exists().toString())
+            logger.debug("${project.projectDir}/deps/clion-$clionVersion.tar.gz exists: " + file("${project.projectDir}/deps/clion-$clionVersion.tar.gz").exists().toString())
+            logger.debug("${project.projectDir}/deps/$clionFullName exists: " + file("${project.projectDir}/deps/$clionFullName").exists().toString())
+
+            logger.debug("Files inside deps:")
+            fileTree("${project.projectDir}/deps").forEach {
+                logger.debug(it.absolutePath)
+            }
+        }
         dependsOn(downloadClion)
     }
 
