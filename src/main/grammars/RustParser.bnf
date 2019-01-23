@@ -1202,6 +1202,13 @@ MacroExpansionReferenceGroup ::= '$' '(' MacroExpansionContents ')' MacroExpansi
 MacroExpansionGroupSeparator ::= <<macroBindingGroupSeparatorToken>>
 
 MacroDef ::= AttrsAndVis MACRO_KW identifier ( MacroDefFunctionLikeBody | MacroDefMatchLikeBody ) {
+  implements = [ "org.rust.lang.core.psi.ext.RsNameIdentifierOwner"
+                 "org.rust.lang.core.psi.ext.RsItemElement"
+                 "org.rust.lang.core.psi.ext.RsQualifiedNamedElement" ]
+  extends = "org.rust.lang.core.psi.ext.RsMacroDefImplMixin"
+  stubClass = "org.rust.lang.core.stubs.RsMacroDefStub"
+  elementTypeFactory = "org.rust.lang.core.stubs.StubImplementationsKt.factory"
+  hooks = [ leftBinder = "ADJACENT_LINE_COMMENTS" ]
   pin = 2
 }
 
